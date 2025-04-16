@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des tâches</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        .form {
+            background: white;
+            padding: 20px;
+            width: 400px;
+            margin: 20px auto;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        input[type="text"] {
+            width: 90%;
+            padding: 8px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0;
+        }
+
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            width: 400px;
+            margin: 20px auto;
+            background: white;
+            padding: 15px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        li {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        li:last-child {
+            border-bottom: none;
+        }
+
+        .edit-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            margin-left: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .edit-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            margin-left: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <h2>Gestion des tâches</h2>
+
+    <div class="form">
+        <h3><%= editTask ? 'Modifier la tâche' : 'Ajouter une tâche' %></h3>
+        <form action="<%= editTask ? '/update/' + editIndex : '/add' %>" method="POST">
+            <input type="text" name="tache" value="<%= editTask ? editTask.tache : '' %>" required>
+            <label>
+                <input type="checkbox" name="etat" <%= editTask && editTask.etat === 'faite' ? 'checked' : '' %>> Faite
+            </label>
+            <input type="hidden" name="index" value="<%= editIndex %>">
+            <button type="submit"><%= editTask ? 'Mettre à jour' : 'Ajouter' %></button>
+        </form>
+    </div>
+
+    <h2>Liste des tâches</h2>
+    <ul>
+        <% taches.forEach((t) => { %>
+            <li>
+                <strong><%= t.tache %></strong> - <%= t.etat %> 
+                <form action="/edit/<%= t.id %>" method="GET" style="display: inline;">
+                    <button type="submit" class="edit-btn">Modifier</button>
+                </form>
+                <form action="/delete" method="POST" style="display: inline;">
+                    <input type="hidden" name="index" value="<%= t.id %>">
+                    <button type="submit" class="delete-btn">Supprimer</button>
+                </form>
+            </li>
+        <% }); %>
+        
+    </ul>
+
+</body>
+</html>
+    

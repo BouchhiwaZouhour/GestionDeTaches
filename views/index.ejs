@@ -124,7 +124,16 @@
     <ul>
         <% taches.forEach((t) => { %>
             <li>
-                <strong><%= t.tache %></strong> - <%= t.etat %> 
+                <% if(t.etat === 'faite') {%>
+                <del><strong> <%= t.tache %> </strong></del>  
+                <% } else { %>
+                    <strong><%= t.tache %></strong>                
+               <% } %>
+             
+                <form action="/updateEtat/<%= t.id %>" method="POST" style="display: inline;">
+                    <input type="checkbox" name="etat" onchange="this.form.submit()" <%= t.etat === 'faite' ? 'checked' : '' %> >
+                </form>
+
                 <form action="/edit/<%= t.id %>" method="GET" style="display: inline;">
                     <button type="submit" class="edit-btn">Modifier</button>
                 </form>
@@ -134,7 +143,7 @@
                 </form>
             </li>
         <% }); %>
-        
+
     </ul>
 </body>
 </html>

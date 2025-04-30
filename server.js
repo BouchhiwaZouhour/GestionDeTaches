@@ -19,11 +19,11 @@ db.connect((err) => {
 });
 
 const app = express();
-const PORT = 3000;
+const PORT = 3005;
 
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static("public")); // si tu veux ajouter CSS ou JS statique
+app.use(express.static("public")); 
 
 // Route d'affichage des tâches
 app.get("/", (req, res) => {
@@ -42,7 +42,7 @@ app.post("/add", (req, res) => {
     const { tache } = req.body;
     const etat = req.body.etat ? "faite" : "non faite";
     const sql = "INSERT INTO taches (tache, etat) VALUES (?, ?)";
-    db.query(sql, [tache, etat], (err) => {
+    db.query(sql, [tache, etat], (err) => { 
         if (err) {
             console.error("Erreur lors de l'ajout de la tâche :", err);
             return res.sendStatus(500);
@@ -68,7 +68,6 @@ app.post("/delete", (req, res) => {
 app.get("/edit/:index", (req, res) => {
     const id = parseInt(req.params.index);
     const sql = "SELECT * FROM taches";
-
     db.query(sql, (err, results) => {
         if (err) {
             console.error("Erreur de récupération des tâches :", err);
@@ -94,6 +93,21 @@ app.post("/update/:index", (req, res) => {
     db.query(sql, [tache, etat, id], (err) => {
         if (err) {
             console.error("Erreur lors de la mise à jour de la tâche :", err);
+            return res.sendStatus(500);
+        }
+        res.redirect("/");
+    });
+});
+
+// Mettre à jour uniquement l'état (faite / non faite) en cochant la case
+app.post("/updateEtat/:id", (req, res) => {
+    const id = parseInt(req.params.id);
+    const etat = req.body.etat ? "faite" : "non faite";
+
+    const sql = "UPDATE taches SET etat = ? WHERE id = ?";
+    db.query(sql, [etat, id], (err) => {
+        if (err) {
+            console.error("Erreur lors de la mise à jour de l'état :", err);
             return res.sendStatus(500);
         }
         res.redirect("/");

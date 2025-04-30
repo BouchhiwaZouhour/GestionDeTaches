@@ -8,6 +8,3 @@ CREATE TABLE taches (
     tache VARCHAR(255) NOT NULL,    
     etat ENUM('faite', 'non faite') NOT NULL DEFAULT 'non faite'
 );
-
-INSERT INTO taches (tache, etat) VALUES ('Faire les courses', 'faite');
-INSERT INTO taches (tache, etat) VALUES ('Faire la vaisselle', 'non faite');
